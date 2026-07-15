@@ -1,0 +1,9 @@
+# Reference only. Merge this with your existing ~/.codex/config.toml if these
+# values are still required by the Codex CLI version you use.
+#
+# This reference does not pin the parent model. Select Sol, Terra, or Luna and
+# the appropriate reasoning effort through /model in the active CLI session.
+
+[features.multi_agent_v2]
+hide_spawn_agent_metadata = false
+tool_namespace = "agents"
