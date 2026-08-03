@@ -43,18 +43,16 @@
 
 ## Safe file operations
 
-- Never use `rm` or `rmdir`.
-- Prefer moving files or directories to trash instead of permanently deleting them.
-- Use an available trash command such as `trash`, `gio trash`, or `trash-put`.
-- If no trash utility is available, stop and report that clearly instead of falling back to permanent deletion.
+- Treat moving files or directories to trash as non-destructive cleanup. When removal is within the requested scope, using trash does not require additional approval.
+- For pre-existing or user-owned files, try an available trash command such as `trash`, `gio trash`, or `trash-put`.
+- If one trash command fails, try another installed trash utility before stopping.
+- Do not emulate a desktop trash implementation by moving files into its internal directories manually.
+- If no trash mechanism works, keep the files in place and ask the user before permanently deleting them.
+- After the user explicitly authorizes permanent deletion of exact paths, a targeted `rm` or `rmdir` command is allowed.
+- Files or directories created by the current task solely as temporary artifacts may be permanently deleted after their exact paths and ownership have been verified.
+- Never use broad, globbed, repository-wide, or ambiguous deletion commands. Use recursive deletion only for a verified exact directory that meets the authorization or temporary-artifact rules above.
 - Do not overwrite or regenerate files outside the requested scope.
 - Do not edit generated files manually when the repository provides a generator.
-
-Examples:
-
-- Instead of `rm <file>`, use a trash command.
-- Instead of `rm -rf <dir>`, use a trash command.
-- Instead of `rmdir <dir>`, use a trash command.
 
 ## Git safety
 
