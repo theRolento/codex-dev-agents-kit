@@ -46,7 +46,8 @@
 - Treat moving files or directories to trash as non-destructive cleanup. When removal is within the requested scope, using trash does not require additional approval.
 - For pre-existing or user-owned files, try an available trash command such as `trash`, `gio trash`, or `trash-put`.
 - If one trash command fails, try another installed trash utility before stopping.
-- Do not emulate a desktop trash implementation by moving files into its internal directories manually.
+- In containerized environments, use `trash-put` for normal removal and let it select the trash directory for the target filesystem.
+- Never choose, create, relocate, or emulate a desktop trash directory manually.
 - If no trash mechanism works, keep the files in place and ask the user before permanently deleting them.
 - After the user explicitly authorizes permanent deletion of exact paths, a targeted `rm` or `rmdir` command is allowed.
 - Files or directories created by the current task solely as temporary artifacts may be permanently deleted after their exact paths and ownership have been verified.
