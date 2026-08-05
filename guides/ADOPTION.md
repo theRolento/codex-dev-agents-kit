@@ -53,6 +53,19 @@ Merge any personal rules you want from `global/AGENTS.md` into `~/.codex/AGENTS.
 
 `global/config.toml.reference` contains reference values, not a complete `~/.codex/config.toml`. Merge values that your Codex CLI version still requires.
 
+For Codex CLI 0.146.0, the supplied block enables Multi-Agent V2 globally, allows one parent plus four subagents, and gives an omitted `wait_agent` timeout a 10-minute default. Its `max_concurrent_threads_per_session = 5` value includes the parent thread.
+
+Project installations do not set a local concurrency limit. They inherit the global block when present and otherwise use the CLI default. To override a particular repository, add only the different total limit to its trusted `.codex/config.toml`:
+
+```toml
+[features.multi_agent_v2]
+max_concurrent_threads_per_session = 3
+```
+
+This example allows one parent plus two subagents.
+
+Merge the custom-agent spawning rules from `global/AGENTS.md` rather than setting a short `root_agent_usage_hint_text`. In Codex CLI 0.146.0, that config property replaces the built-in root-agent hint instead of appending to it.
+
 Do not copy `global/AGENTS.md` into the target repository. Do not copy `project/AGENTS.md` into `~/.codex/`.
 
 ## 5. Keep `$devibify` separate

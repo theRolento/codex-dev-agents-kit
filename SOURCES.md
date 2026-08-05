@@ -9,6 +9,8 @@ The following sources informed the kit's design and review workflow.
 - [Basic configuration](https://learn.chatgpt.com/docs/config-file/config-basic)
 - [Advanced configuration](https://learn.chatgpt.com/docs/config-file/config-advanced)
 - [Codex models](https://learn.chatgpt.com/docs/models)
+- [Codex CLI 0.146.0 Multi-Agent V2 configuration resolver](https://github.com/openai/codex/blob/rust-v0.146.0/codex-rs/core/src/config/mod.rs)
+- [Codex CLI 0.146.0 Multi-Agent V2 spawn handler](https://github.com/openai/codex/blob/rust-v0.146.0/codex-rs/core/src/tools/handlers/multi_agents_v2/spawn.rs)
 
 ## Referenced skills
 

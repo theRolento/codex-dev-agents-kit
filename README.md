@@ -18,7 +18,7 @@ Install the core agents in a target repository before reviewing the optional fil
 
 | Source in this kit | Destination | Required | Purpose |
 |---|---|---:|---|
-| `project/.codex/` | `<target-repository>/.codex/` | Yes | Agent definitions and project agent settings |
+| `project/.codex/agents/` | `<target-repository>/.codex/agents/` | Yes | Project-local agent definitions |
 | `project/AGENTS.md` | `<target-repository>/AGENTS.md` | Yes | Agent selection and coordination rules |
 | `project/optional-agents/*.toml` | `<target-repository>/.codex/agents/` | No | Deep exploration or Git publishing |
 | `global/AGENTS.md` | `~/.codex/AGENTS.md` | No | Personal development instructions across repositories |
@@ -41,7 +41,6 @@ The target repository now contains:
 ```text
 <target-repository>/
 |-- .codex/
-|   |-- config.toml
 |   `-- agents/
 |       |-- code_explorer.toml
 |       |-- quick_implementer.toml
@@ -95,12 +94,10 @@ workspace/
 |-- target-project-a/
 |   |-- AGENTS.md
 |   `-- .codex/
-|       |-- config.toml
 |       `-- agents/
 |-- target-project-b/
 |   |-- AGENTS.md
 |   `-- .codex/
-|       |-- config.toml
 |       `-- agents/
 |-- agent-tool-a/          # No project installation
 `-- agent-tool-b/          # No project installation
@@ -191,7 +188,6 @@ codex-dev-agents-kit/
 |-- project/
 |   |-- AGENTS.md
 |   |-- .codex/
-|   |   |-- config.toml
 |   |   `-- agents/
 |   |       |-- code_explorer.toml
 |   |       |-- quick_implementer.toml
@@ -217,6 +213,12 @@ The core agents work without the files under `global/`.
 Compare `global/AGENTS.md` with your existing `~/.codex/AGENTS.md` and merge the rules you want to apply across repositories. Do not overwrite personal instructions without reviewing the differences.
 
 `global/config.toml.reference` contains reference values for the MultiAgent V2 feature block. Merge values that your Codex CLI version still requires into `~/.codex/config.toml`. The reference is not a complete personal configuration and does not set the parent model.
+
+For Codex CLI 0.146.0, the reference forces Multi-Agent V2, uses the `agents` tool namespace, keeps spawn metadata visible, allows one parent plus four concurrent subagents, and changes the default `wait_agent` timeout from 30 seconds to 10 minutes. The V2 value `max_concurrent_threads_per_session = 5` counts the parent; the legacy `[agents] max_threads = 4` form counts only subagents.
+
+The project installation intentionally has no `.codex/config.toml` concurrency block. It inherits the global V2 limit when installed and otherwise uses the CLI default. Add a project-local V2 override only when a repository genuinely needs a different total thread limit.
+
+The configured-agent `fork_turns` rule lives in `global/AGENTS.md`. Do not replace `root_agent_usage_hint_text` with only that rule: in Codex CLI 0.146.0, a configured value replaces the complete built-in root-agent hint instead of appending to it.
 
 Do not copy `global/AGENTS.md` into a target repository. Do not copy `project/AGENTS.md` into `~/.codex/`.
 

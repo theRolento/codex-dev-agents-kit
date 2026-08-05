@@ -9,6 +9,13 @@
 - Return clear errors instead of hiding failures behind fallbacks.
 - Do not claim completion until you run the relevant checks. State any skipped checks and the remaining risks.
 
+## Custom agent spawning
+
+- When spawning a configured agent role, select it through its agent type and set `fork_turns = "none"` by default.
+- Use a small positive `fork_turns` value only when the agent genuinely needs recent conversation context.
+- Never omit `fork_turns` when selecting an agent type. A full-history fork rejects agent-type overrides.
+- Let the configured agent TOML determine its model and reasoning effort. Do not pass explicit model or reasoning overrides when the role already defines them.
+
 ## Project commands
 
 - Prefer existing project scripts and repository conventions over ad hoc commands.
