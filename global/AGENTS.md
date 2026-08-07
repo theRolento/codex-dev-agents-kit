@@ -51,9 +51,12 @@
 ## Safe file operations
 
 - Treat moving files or directories to trash as non-destructive cleanup. When removal is within the requested scope, using trash does not require additional approval.
-- For pre-existing or user-owned files, try an available trash command such as `trash`, `gio trash`, or `trash-put`.
-- If one trash command fails, try another installed trash utility before stopping.
-- In containerized environments, use `trash-put` for normal removal and let it select the trash directory for the target filesystem.
+- For pre-existing or user-owned files, try installed trash utilities in this exact order: `trash-put`, `trash`, then `gio trash`.
+- Check for `trash-put` first and use it whenever it is installed. In Linux containers, let it select the trash directory for the target filesystem.
+- Do not call `gio trash` while `trash-put` or `trash` remains available. Use `gio trash` only as the last fallback.
+- Treat a missing command, non-zero exit, or unsupported-filesystem error from any one trash utility as non-blocking. Record the attempt, then continue through the installed utilities in the required order until one succeeds or all have failed.
+- If a utility ran out of order, return to the required order and try each installed utility that has not run yet. End the fallback sequence when one succeeds.
+- Stop only after every installed trash utility has run and failed. Report each attempted command and its error.
 - Never choose, create, relocate, or emulate a desktop trash directory manually.
 - If no trash mechanism works, keep the files in place and ask the user before permanently deleting them.
 - After the user explicitly authorizes permanent deletion of exact paths, a targeted `rm` or `rmdir` command is allowed.
