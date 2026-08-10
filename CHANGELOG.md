@@ -6,6 +6,7 @@
 - Removes legacy project-local `max_threads` and V1-only `max_depth` settings.
 - Documents total-thread counting, repository overrides, configured-agent `fork_turns` requirements, and safe placement of root-agent guidance.
 - Makes `trash-put` the primary removal tool and prevents a failure from any one trash utility from stopping cleanup before every installed alternative is tried.
+- Adds global scope controls against speculative guards, premature abstractions, and unrequested refactors.
 
 ## 1.0.0 - 2026-07-15
 

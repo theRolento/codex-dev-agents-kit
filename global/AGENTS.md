@@ -6,6 +6,9 @@
 - Keep changes minimal, targeted, and production-ready.
 - Prefer reuse over reinvention.
 - Do not introduce unnecessary dependencies, abstractions, or visual novelty unless clearly justified.
+- Implement the smallest complete change that satisfies the current request and verified failure modes.
+- Do not add speculative defensive guards, fallback paths, compatibility layers, extension points, or abstractions for hypothetical future requirements. Add them only when current requirements, observed failures, security constraints, or existing project patterns justify them.
+- Keep plans and delegated tasks within the requested scope. Do not turn a local change into a broader refactor without asking first.
 - Return clear errors instead of hiding failures behind fallbacks.
 - Do not claim completion until you run the relevant checks. State any skipped checks and the remaining risks.
 
