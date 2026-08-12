@@ -5,7 +5,7 @@
 - Centralizes the Codex CLI 0.146.0 Multi-Agent V2 concurrency and wait defaults in the optional global configuration reference.
 - Removes legacy project-local `max_threads` and V1-only `max_depth` settings.
 - Documents total-thread counting, repository overrides, configured-agent `fork_turns` requirements, and safe placement of root-agent guidance.
-- Makes `trash-put` the primary removal tool and prevents a failure from any one trash utility from stopping cleanup before every installed alternative is tried.
+- Uses `trash-put` as the sole recoverable removal command and requires confirmation before permanent deletion when it is unavailable or fails.
 - Adds global scope controls against speculative guards, premature abstractions, and unrequested refactors.
 - Uses project-local browser tooling, limits browser checks to relevant changes, and avoids dependency changes or speculative system-library installation.
 - Condenses global guidance and makes verification, UI skills, and framework documentation proportional to the task while retaining mixed-stack rules.

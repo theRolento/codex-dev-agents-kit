@@ -36,9 +36,8 @@
 ## Safe file operations
 
 - Treat in-scope trash operations as non-destructive and allowed without extra approval.
-- For pre-existing or user-owned paths, try installed utilities in this order: `trash-put`, `trash`, `gio trash`. Let the utility select the trash location.
-- A missing command, non-zero exit, or unsupported filesystem does not end the sequence; try each untried installed utility in order until one succeeds or all fail.
-- If all fail, keep the paths, report each command and error, and ask before permanent deletion. Never emulate a trash directory.
+- Use `trash-put -- <path>` for pre-existing or user-owned paths and let it select the trash location.
+- If `trash-put` is unavailable or fails, keep the paths, report the command and error, and ask before permanent deletion. Do not use another trash utility or emulate a trash directory.
 - Permanently delete an exact path only with explicit user authorization; task-created temporary artifacts are exempt after verifying their exact paths and ownership.
 - Never use broad, globbed, repository-wide, or ambiguous deletion targets. Recurse only into an exact verified path covered by the preceding rule.
 - Do not overwrite or regenerate files outside the requested scope.
