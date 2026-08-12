@@ -2,30 +2,22 @@
 
 ## General
 
-- Follow existing project patterns unless explicitly asked to change them.
-- Keep changes minimal, targeted, and production-ready.
-- Prefer reuse over reinvention.
-- Do not introduce unnecessary dependencies, abstractions, or visual novelty unless clearly justified.
-- Implement the smallest complete change that satisfies the current request and verified failure modes.
-- Do not add speculative defensive guards, fallback paths, compatibility layers, extension points, or abstractions for hypothetical future requirements. Add them only when current requirements, observed failures, security constraints, or existing project patterns justify them.
-- Keep plans and delegated tasks within the requested scope. Do not turn a local change into a broader refactor without asking first.
+- Follow existing project patterns and keep work, plans, and delegated tasks within the requested scope.
+- Implement the smallest complete, production-ready change that satisfies current requirements and verified failure modes.
+- Reuse existing code. Avoid unnecessary dependencies, visual novelty, speculative guards, fallback paths, compatibility layers, extension points, and abstractions unless current requirements, observed failures, security, or project patterns justify them.
 - Return clear errors instead of hiding failures behind fallbacks.
-- Do not claim completion until you run the relevant checks. State any skipped checks and the remaining risks.
+- Run relevant checks before claiming completion. State skipped checks and remaining risks.
 
 ## Custom agent spawning
 
-- When spawning a configured agent role, select it through its agent type and set `fork_turns = "none"` by default.
-- Use a small positive `fork_turns` value only when the agent genuinely needs recent conversation context.
-- Never omit `fork_turns` when selecting an agent type. A full-history fork rejects agent-type overrides.
+- When spawning a configured agent role, select its agent type and set `fork_turns = "none"` by default.
+- Use a small positive `fork_turns` value only for needed recent context. Never omit it for a configured role because a full-history fork rejects agent-type overrides.
 - Let the configured agent TOML determine its model and reasoning effort. Do not pass explicit model or reasoning overrides when the role already defines them.
 
 ## Project commands
 
-- Prefer existing project scripts and repository conventions over ad hoc commands.
-- Inspect project files before choosing commands.
-- Do not invent new scripts unless explicitly asked.
+- Inspect project files, then use existing scripts, repository conventions, and adopted package, environment, SDK, and task runners. Do not invent scripts unless asked.
 - Assume the workspace and project tooling are Linux-native unless local evidence shows otherwise.
-- Use the package manager, environment manager, SDK manager, and task runner already adopted by the project.
 - Do not allow `npx`, `npm exec`, or another package runner to download a missing tool implicitly. Use a project-local dependency or an existing project script. Ask before installing a missing tool or dependency.
 - For browser work, use the repository's existing scripts and project-local browser tooling. Do not invoke a globally installed Playwright package.
 - Do not update Playwright to supply a missing browser. If the repository has no browser-testing tool, ask before adding one.
@@ -33,129 +25,74 @@
 
 ### Node, web, and SvelteKit projects
 
-- Check `package.json`, the `packageManager` field, and lockfiles before selecting a package manager or command.
-- Prefer existing scripts when available.
-- Common examples include:
-  - `npm run lint`
-  - `npm run format`
-  - `npm run check`
-  - `npm run test`
-  - `npm run build`
-- If a relevant script does not exist, use only a project-local configured tool. Do not fetch a tool implicitly through `npx` or `npm exec`.
+- Select the package manager from `package.json`, its `packageManager` field, and lockfiles; use package scripts and project-local tools.
 
 ## UI work
 
-- For user-facing UI work, including web, SvelteKit, Flutter, landing pages, dashboards, components, forms, styling, and UI or UX review, use the `$devibify` skill when installed.
-- Apply `$devibify` when generating, refactoring, polishing, or reviewing visible UI. Do not invoke it for backend-only or non-visual changes.
-- Treat project-specific UI and UX guidance as a constraint and reconcile it with `$devibify`. The user's requirements and the existing product design system take precedence over generic defaults.
-- Treat UI work as system design plus implementation, not just styling.
-- Define or infer a UI contract before making non-trivial UI changes.
-- Verify responsive behavior, interactive states, loading states, error states, empty states, disabled states, and accessibility basics before finishing when relevant.
+- Use `$devibify` for substantive UI implementation, refactoring, or UX review. Skip it for backend, non-visual, isolated copy or token, and mechanical UI changes.
+- Reconcile `$devibify` with project guidance; user requirements and the product design system take precedence.
+- For substantive UI work, define or infer the UI contract and verify relevant responsive behavior, interaction and data states, and accessibility basics.
 
 ## Safe file operations
 
-- Treat moving files or directories to trash as non-destructive cleanup. When removal is within the requested scope, using trash does not require additional approval.
-- For pre-existing or user-owned files, try installed trash utilities in this exact order: `trash-put`, `trash`, then `gio trash`.
-- Check for `trash-put` first and use it whenever it is installed. In Linux containers, let it select the trash directory for the target filesystem.
-- Do not call `gio trash` while `trash-put` or `trash` remains available. Use `gio trash` only as the last fallback.
-- Treat a missing command, non-zero exit, or unsupported-filesystem error from any one trash utility as non-blocking. Record the attempt, then continue through the installed utilities in the required order until one succeeds or all have failed.
-- If a utility ran out of order, return to the required order and try each installed utility that has not run yet. End the fallback sequence when one succeeds.
-- Stop only after every installed trash utility has run and failed. Report each attempted command and its error.
-- Never choose, create, relocate, or emulate a desktop trash directory manually.
-- If no trash mechanism works, keep the files in place and ask the user before permanently deleting them.
-- After the user explicitly authorizes permanent deletion of exact paths, a targeted `rm` or `rmdir` command is allowed.
-- Files or directories created by the current task solely as temporary artifacts may be permanently deleted after their exact paths and ownership have been verified.
-- Never use broad, globbed, repository-wide, or ambiguous deletion commands. Use recursive deletion only for a verified exact directory that meets the authorization or temporary-artifact rules above.
+- Treat in-scope trash operations as non-destructive and allowed without extra approval.
+- For pre-existing or user-owned paths, try installed utilities in this order: `trash-put`, `trash`, `gio trash`. Let the utility select the trash location.
+- A missing command, non-zero exit, or unsupported filesystem does not end the sequence; try each untried installed utility in order until one succeeds or all fail.
+- If all fail, keep the paths, report each command and error, and ask before permanent deletion. Never emulate a trash directory.
+- Permanently delete an exact path only with explicit user authorization; task-created temporary artifacts are exempt after verifying their exact paths and ownership.
+- Never use broad, globbed, repository-wide, or ambiguous deletion targets. Recurse only into an exact verified path covered by the preceding rule.
 - Do not overwrite or regenerate files outside the requested scope.
 - Do not edit generated files manually when the repository provides a generator.
 
 ## Git safety
 
-- The user manages GitHub synchronization and branches in VS Code. Perform a Git mutation or remote operation only when the user requests that specific operation.
+- The user manages GitHub synchronization and branches. Perform Git mutations or remote operations only when the user requests the specific action.
 - Do not run destructive Git commands such as `git reset --hard`, `git checkout --`, `git restore`, `git clean`, force pushes, or history rewrites unless the user explicitly asks for that exact operation.
-- Do not revert, overwrite, or discard changes you did not make. If unrelated local changes are present, leave them alone.
-- It is fine to inspect Git state with read-only commands such as `git status`, `git diff`, `git log`, and `git show` when relevant.
+- Preserve unrelated changes. Read-only commands such as `git status`, `git diff`, `git log`, and `git show` are allowed when relevant.
 
 ## Tests and debugging
 
-- When a unit or integration test fails, do not assume the production code is wrong.
-- Check whether the failure reveals:
-  - a real bug in production code
-  - an outdated or incorrect test
-  - an environment or setup issue
-- Favor fixes that address root causes rather than patching symptoms.
-- Add or update tests when behavior changes and a relevant test harness exists.
-- Do not create superficial tests that only mirror implementation details or pass without exercising the requested behavior.
+- When a test fails, determine whether production code, the test, or the environment is wrong before editing; fix the root cause.
+- Add or update tests for behavior changes when a relevant harness exists. Avoid tests that only mirror implementation details.
 
 ## Verification
 
-- Run relevant formatting, linting, analysis, typechecking, tests, and build steps before finishing when those scripts or commands exist.
-- Start with the smallest relevant verification, then expand according to the changed surface and repository instructions.
+- Run the smallest relevant configured check; expand only when change risk or repository instructions require broader coverage. Report skipped checks, blockers, and remaining risk.
 - Run Playwright or other browser-based checks only when the change can affect browser-visible behavior or the repository instructions require them. Use the smallest relevant browser check.
 - If project-local Playwright reports a missing compatible browser, state the Playwright version and required browser revision, then install that browser through the project-local CLI into the configured cache. Do not change `package.json` or a lockfile for a missing browser.
 - Install a missing Playwright browser without `--with-deps` first. Use `--with-deps` only after an error identifies missing system libraries.
-- If verification cannot be completed, say exactly what was not run, why, and what risk remains.
 - If the configured browser cache is not writable or the project-local browser installation fails, report the command and error instead of using a global browser or changing project dependencies.
-- If verification is still blocked by an environment issue that cannot be fixed in the Linux workspace, do not keep retrying unrelated workarounds. List the commands the user should run manually and mark verification as not completed locally.
 - For refactors, pay extra attention to regressions, call-path consistency, state transitions, data migrations, compatibility, and error handling before declaring the work complete.
 
-## Docker and networking
+## Docker, networking, and long-running processes
 
 - When running inside Docker, never assume `127.0.0.1` reaches the host machine.
 - If the app is running on the host, prefer `http://host.docker.internal:<port>` when supported by the environment.
-- If starting a server inside the container, bind it to `0.0.0.0`, not `127.0.0.1`.
-- Do not publish common host development ports such as `5173` or `4173` by default from the Codex container when host-side tools may also use them. Prefer high remapped host ports or opt-in port publishing to avoid breaking normal `localhost` workflows outside Docker.
-
-## Long-running processes
-
-- When starting development servers, preview servers, watchers, Playwright reports, or other long-running commands, keep track of the command, working directory, process, and URL or port.
+- Bind container servers to `0.0.0.0`. Avoid publishing common host ports such as `5173` or `4173`; prefer high remapped ports or opt-in publishing.
+- Track each long-running command, working directory, process, and URL or port.
 - Do not leave long-running processes active after finishing unless the user asked for them to stay running.
-- If a server is needed for browser verification from inside Docker, bind it to `0.0.0.0` and use the configured forwarded port or container-reachable URL.
 
 ## Svelte and SvelteKit
 
-- For Svelte or SvelteKit work, consult the official Svelte LLM documentation before making framework-specific changes:
-  - `https://svelte.dev/docs/llms`
-  - use the relevant `llms.txt` or `llms-full.txt` documentation when helpful
+- Consult the official Svelte LLM documentation at `https://svelte.dev/docs/llms` only when framework behavior is uncertain, version-sensitive, or not established by repository patterns.
 - Respect server-only and client-reachable module boundaries.
-- Follow the repository's established patterns for load functions, actions, endpoints, hooks, validation, state, forms, and error handling.
+- Follow repository patterns for routing, data loading, actions, endpoints, hooks, validation, state, forms, and errors.
 - Do not expose private environment variables, server-only modules, secrets, or privileged data to client bundles.
 
 ## Flutter, Dart, and FVM
 
 - In Flutter or Dart projects, use the native toolchain instead of Node-based commands.
 - If the project uses FVM, prefer `fvm flutter ...` and `fvm dart ...` over plain `flutter` or `dart`.
-- Check project files and existing conventions before choosing commands.
-- Respect the repository's existing state-management, navigation, dependency-injection, persistence, serialization, lifecycle, and code-generation patterns.
-- Never edit generated Dart files manually when the project provides a generator.
+- Follow the project's state, navigation, dependency-injection, persistence, serialization, lifecycle, and code-generation workflows. Do not edit generated Dart files.
 - If Flutter, Dart, or FVM commands fail because SDKs, emulators, device tooling, signing, or platform-specific project files are only configured outside the Linux workspace, stop after the first clear environment failure and provide the exact commands for the user to run manually.
-- Common verification commands include:
-  - `fvm flutter analyze`
-  - `fvm flutter test`
-  - `fvm dart format .`
-  - `fvm dart analyze`
-- If FVM is not configured for the project, use the standard Flutter and Dart commands instead.
 
 ## Python
 
-- Check `pyproject.toml`, lockfiles, task-runner configuration, supported Python versions, and repository instructions before choosing commands.
-- Use the package and environment manager already adopted by the project, such as `uv`, Poetry, PDM, Hatch, pip-tools, or a project-managed virtual environment.
-- Do not switch package managers or introduce a new environment workflow unless explicitly asked.
-- Do not install packages globally or use bare `pip` when project-managed commands exist.
-- Prefer existing project scripts and configured tools over generic replacements.
+- Read `pyproject.toml`, lockfiles, supported Python versions, and task-runner configuration; use the adopted package and environment manager.
+- Do not switch managers, introduce a new environment workflow, install packages globally, or use bare `pip` when project-managed commands exist.
 - Respect the project's package layout, import boundaries, typing policy, async model, transaction handling, migration workflow, logging, exception handling, and test conventions.
 - Do not edit generated migrations, generated clients, compiled schemas, or generated source files manually when a generator exists.
-- Common verification commands may include the following only when the corresponding tools are configured:
-  - `uv run pytest`
-  - `uv run ruff check .`
-  - `uv run ruff format --check .`
-  - `uv run mypy .`
-  - `uv run pyright`
-- If the project uses another runner or package manager, use its equivalent commands instead.
 
 ## Final response convention
 
-- When code changes are made, include one suggested Conventional Commits-compliant commit message in the final response.
-- Format it as `<type>[optional scope]: <description>`.
-- If the change is breaking, use `!` before the colon or include a `BREAKING CHANGE:` footer.
-- Do not include a commit message when no code changes were made.
+- After changing code or tracked documentation, suggest exactly one commit message formatted as `<type>[optional scope]: <description>`; use `!` or a `BREAKING CHANGE:` footer when applicable. Omit it when no files changed.

@@ -8,6 +8,7 @@
 - Makes `trash-put` the primary removal tool and prevents a failure from any one trash utility from stopping cleanup before every installed alternative is tried.
 - Adds global scope controls against speculative guards, premature abstractions, and unrequested refactors.
 - Uses project-local browser tooling, limits browser checks to relevant changes, and avoids dependency changes or speculative system-library installation.
+- Condenses global guidance and makes verification, UI skills, and framework documentation proportional to the task while retaining mixed-stack rules.
 
 ## 1.0.0 - 2026-07-15
 
