@@ -29,7 +29,7 @@ cp "$KIT/project/AGENTS.md" ./AGENTS.md
 
 If `AGENTS.md` exists, merge the `Project-local programming agents` section into it.
 
-The routing rules work in single-stack and mixed-stack repositories.
+The role descriptions provide normal routing; `project/AGENTS.md` adds cross-role exceptions and coordination. Together they form a self-contained project installation for single-stack and mixed-stack repositories.
 
 ## 3. Decide whether Git should track the installation
 

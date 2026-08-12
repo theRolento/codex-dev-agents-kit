@@ -19,7 +19,7 @@ Install the core agents in a target repository before reviewing the optional fil
 | Source in this kit | Destination | Required | Purpose |
 |---|---|---:|---|
 | `project/.codex/agents/` | `<target-repository>/.codex/agents/` | Yes | Project-local agent definitions |
-| `project/AGENTS.md` | `<target-repository>/AGENTS.md` | Yes | Agent selection and coordination rules |
+| `project/AGENTS.md` | `<target-repository>/AGENTS.md` | Yes | Cross-role routing and coordination rules |
 | `project/optional-agents/*.toml` | `<target-repository>/.codex/agents/` | No | Deep exploration or Git publishing |
 | `global/AGENTS.md` | `~/.codex/AGENTS.md` | No | Personal development instructions across repositories |
 | `global/config.toml.reference` | `~/.codex/config.toml` | No | Reference values for personal Codex configuration |
@@ -105,7 +105,7 @@ workspace/
 
 Install the project files in software repositories that need the agents. Do not install them in repositories that contain agent tools.
 
-The files under `<repository>/.codex/agents/` define custom Codex subagents. The repository-root `AGENTS.md` tells the parent agent when to use them.
+The files under `<repository>/.codex/agents/` define custom Codex subagents and describe their normal routing. The repository-root `AGENTS.md` supplies cross-role exceptions and coordination rules.
 
 ## Terminology
 
@@ -151,7 +151,7 @@ The `code_reviewer` prompt incorporates the relevant parts of that workflow:
 - project rules taking precedence over generic heuristics
 - checks for missing requirements, partial implementations, incorrect behavior, regressions, and unnecessary scope
 
-The reviewer remains one read-only subagent and does not start more reviewers. Its report covers Correctness and Risk, Spec, Standards, Tests, and UI when the change affects visible UI.
+The reviewer remains one read-only subagent and does not start more reviewers. It checks Correctness and Risk, Spec, Standards, Tests, and UI when applicable, then reports concrete findings followed by a compact scope and risk summary.
 
 You can uninstall `$code-review` without losing the checks listed above.
 
@@ -208,7 +208,7 @@ codex-dev-agents-kit/
 
 ### Personal global instructions
 
-The core agents work without the files under `global/`.
+The project installation is self-contained: its routing and role safeguards work without the files under `global/`.
 
 Compare `global/AGENTS.md` with your existing `~/.codex/AGENTS.md` and merge the rules you want to apply across repositories. Do not overwrite personal instructions without reviewing the differences.
 
@@ -281,7 +281,7 @@ See `guides/PROMPTS.md` and `guides/WORKFLOWS.md` for more examples.
 
 ## Project-specific `AGENTS.md` guidance
 
-The supplied `project/AGENTS.md` contains agent selection and coordination rules. Add project details when they remain stable and are hard to infer, such as:
+The supplied `project/AGENTS.md` contains cross-role routing exceptions and coordination rules. Agent definitions provide their normal selection guidance. Add project details when they remain stable and are hard to infer, such as:
 
 - exact commands that project files do not reveal
 - generated directories that agents must not edit

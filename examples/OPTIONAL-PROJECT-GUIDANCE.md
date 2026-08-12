@@ -1,6 +1,6 @@
 # Optional project-specific guidance
 
-The supplied `project/AGENTS.md` contains the routing rules intended for the target repository root. Add the following sections when they provide stable project information that agents cannot infer from the repository.
+The supplied agent descriptions provide normal routing, while `project/AGENTS.md` contains cross-role exceptions and coordination rules for the target repository root. Add the following sections when they provide stable project information that agents cannot infer from the repository.
 
 ## Mixed-repository example
 
