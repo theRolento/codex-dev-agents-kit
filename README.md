@@ -20,7 +20,7 @@ Install the core agents in a target repository before reviewing the optional fil
 |---|---|---:|---|
 | `project/.codex/agents/` | `<target-repository>/.codex/agents/` | Yes | Project-local agent definitions |
 | `project/AGENTS.md` | `<target-repository>/AGENTS.md` | Yes | Cross-role routing and coordination rules |
-| `project/optional-agents/*.toml` | `<target-repository>/.codex/agents/` | No | Deep exploration or Git publishing |
+| `project/optional-agents/*.toml` | `<target-repository>/.codex/agents/` | No | Git publishing |
 | `global/AGENTS.md` | `~/.codex/AGENTS.md` | No | Personal development instructions across repositories |
 | `global/config.toml.reference` | `~/.codex/config.toml` | No | Reference values for personal Codex configuration |
 
@@ -43,6 +43,7 @@ The target repository now contains:
 |-- .codex/
 |   `-- agents/
 |       |-- code_explorer.toml
+|       |-- deep_code_explorer.toml
 |       |-- quick_implementer.toml
 |       |-- implementer.toml
 |       `-- code_reviewer.toml
@@ -124,7 +125,7 @@ The files under `<repository>/.codex/agents/` define custom Codex subagents and 
 | `quick_implementer` | `gpt-5.6-luna` | `high` | `workspace-write` | Core |
 | `implementer` | `gpt-5.6-sol` | `low` | `workspace-write` | Core |
 | `code_reviewer` | `gpt-5.6-sol` | `low` | `read-only` | Core |
-| `deep_code_explorer` | `gpt-5.6-luna` | `xhigh` | `read-only` | Optional |
+| `deep_code_explorer` | `gpt-5.6-luna` | `xhigh` | `read-only` | Core |
 | `commit_publisher` | `gpt-5.6-luna` | `high` | `workspace-write` | Optional |
 
 ### GPT-5.6 model family
@@ -190,11 +191,11 @@ codex-dev-agents-kit/
 |   |-- .codex/
 |   |   `-- agents/
 |   |       |-- code_explorer.toml
+|   |       |-- deep_code_explorer.toml
 |   |       |-- quick_implementer.toml
 |   |       |-- implementer.toml
 |   |       `-- code_reviewer.toml
 |   `-- optional-agents/
-|       |-- deep_code_explorer.toml
 |       `-- commit_publisher.toml
 |-- examples/
 |   `-- OPTIONAL-PROJECT-GUIDANCE.md
@@ -230,16 +231,10 @@ Do not copy `global/AGENTS.md` into a target repository. Do not copy `project/AG
 
 Set `KIT` to this kit's path if you opened a new shell:
 
-Install the deep explorer:
-
-```bash
-KIT=/path/to/codex-dev-agents-kit
-cp "$KIT/project/optional-agents/deep_code_explorer.toml" .codex/agents/
-```
-
 Install the Git publishing agent:
 
 ```bash
+KIT=/path/to/codex-dev-agents-kit
 cp "$KIT/project/optional-agents/commit_publisher.toml" .codex/agents/
 ```
 

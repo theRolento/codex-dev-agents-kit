@@ -14,6 +14,7 @@ The core agents are:
 
 ```text
 code_explorer
+deep_code_explorer
 quick_implementer
 implementer
 code_reviewer
@@ -90,12 +91,6 @@ The routing rules work without extra project guidance. Add details that remain s
 See `examples/OPTIONAL-PROJECT-GUIDANCE.md`.
 
 ## 7. Install optional agents where needed
-
-Install `deep_code_explorer`:
-
-```bash
-cp "$KIT/project/optional-agents/deep_code_explorer.toml" .codex/agents/
-```
 
 Install `commit_publisher`:
 

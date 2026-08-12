@@ -9,7 +9,7 @@
 ### Routing exceptions
 
 - Let the available role descriptions guide normal selection.
-- Use `deep_code_explorer` only when installed and normal exploration is insufficient or the question crosses several technology boundaries.
+- Use `deep_code_explorer` only when normal exploration is insufficient or the question crosses several technology boundaries.
 - Use `code_reviewer` when requested or when change risk justifies an independent pass, not after every trivial edit.
 - Use `commit_publisher` only when it is installed and the user explicitly asks Codex to commit, or to commit and push. A request for a commit message is not authorization to perform Git mutations.
 

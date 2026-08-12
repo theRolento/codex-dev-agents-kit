@@ -11,6 +11,7 @@
 - Condenses global guidance and makes verification, UI skills, and framework documentation proportional to the task while retaining mixed-stack rules.
 - Condenses project routing and all core and optional agent prompts while preserving role boundaries, read-only enforcement, Git safeguards, and independent operation from the optional global configuration.
 - Makes reviewer output findings-first with a compact scope and risk summary instead of mandatory empty axis sections.
+- Promotes `deep_code_explorer` to the core project installation while keeping Git publishing optional.
 
 ## 1.0.0 - 2026-07-15
 
