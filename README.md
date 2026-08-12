@@ -212,6 +212,8 @@ The core agents work without the files under `global/`.
 
 Compare `global/AGENTS.md` with your existing `~/.codex/AGENTS.md` and merge the rules you want to apply across repositories. Do not overwrite personal instructions without reviewing the differences.
 
+The global browser-verification rules use each target repository's local Playwright package and install only its required browser revision. Docker users should configure a writable, persistent Playwright browser cache; a global Playwright package is neither required nor used as a fallback.
+
 `global/config.toml.reference` contains reference values for the MultiAgent V2 feature block. Merge values that your Codex CLI version still requires into `~/.codex/config.toml`. The reference is not a complete personal configuration and does not set the parent model.
 
 For Codex CLI 0.146.0, the reference forces Multi-Agent V2, uses the `agents` tool namespace, keeps spawn metadata visible, allows one parent plus four concurrent subagents, and changes the default `wait_agent` timeout from 30 seconds to 10 minutes. The V2 value `max_concurrent_threads_per_session = 5` counts the parent; the legacy `[agents] max_threads = 4` form counts only subagents.

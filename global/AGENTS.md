@@ -27,7 +27,8 @@
 - Assume the workspace and project tooling are Linux-native unless local evidence shows otherwise.
 - Use the package manager, environment manager, SDK manager, and task runner already adopted by the project.
 - Do not allow `npx`, `npm exec`, or another package runner to download a missing tool implicitly. Use a project-local dependency or an existing project script. Ask before installing a missing tool or dependency.
-- If Playwright, Chrome, Chromium, or another browser runtime is missing or mismatched, install the required project-scoped browser or runtime using the repository's documented commands or the relevant local tool, such as `npx --no-install playwright install --with-deps chromium`, instead of sending the task back to a host environment.
+- For browser work, use the repository's existing scripts and project-local browser tooling. Do not invoke a globally installed Playwright package.
+- Do not update Playwright to supply a missing browser. If the repository has no browser-testing tool, ask before adding one.
 - If a command fails because of a true external host dependency, missing service, native binary mismatch unrelated to installable Linux tooling, or another environment issue that cannot be fixed locally, stop after the first clear environment failure, report the exact command and error, and ask the user to run or configure it manually.
 
 ### Node, web, and SvelteKit projects
@@ -90,8 +91,11 @@
 
 - Run relevant formatting, linting, analysis, typechecking, tests, and build steps before finishing when those scripts or commands exist.
 - Start with the smallest relevant verification, then expand according to the changed surface and repository instructions.
+- Run Playwright or other browser-based checks only when the change can affect browser-visible behavior or the repository instructions require them. Use the smallest relevant browser check.
+- If project-local Playwright reports a missing compatible browser, state the Playwright version and required browser revision, then install that browser through the project-local CLI into the configured cache. Do not change `package.json` or a lockfile for a missing browser.
+- Install a missing Playwright browser without `--with-deps` first. Use `--with-deps` only after an error identifies missing system libraries.
 - If verification cannot be completed, say exactly what was not run, why, and what risk remains.
-- Do not treat Playwright, Chrome, Chromium, or other browser-runtime installation failures as host-environment blockers by default. In the Linux workspace, try the relevant project-scoped install or verification command before marking verification blocked.
+- If the configured browser cache is not writable or the project-local browser installation fails, report the command and error instead of using a global browser or changing project dependencies.
 - If verification is still blocked by an environment issue that cannot be fixed in the Linux workspace, do not keep retrying unrelated workarounds. List the commands the user should run manually and mark verification as not completed locally.
 - For refactors, pay extra attention to regressions, call-path consistency, state transitions, data migrations, compatibility, and error handling before declaring the work complete.
 
